@@ -1,44 +1,40 @@
+# app.py
 import streamlit as st
 import pandas as pd
-import folium
-from streamlit_folium import st_folium
+from config import API_KEY
 from weather_fetcher import fetch_weather_data
 from visualize import plot_temperature_chart
 
-st.set_page_config(page_title="Weather Dashboard", layout="wide")
-st.title("🌍 Weather Forecast")
+st.set_page_config(
+    page_title="🌤️ Weather Forecast Dashboard",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-city = st.text_input("City Name", value="London")
+st.title("🌤️ Weather Forecast Dashboard")
+city = st.text_input("Enter city name", "Bangalore")
 
-# Trigger search
-if st.button("Get Forecast"):
-    weather, err = fetch_weather_data(city)
-    if err:
-        st.error(err)
+if city:
+    data, forecast_df = fetch_weather_data(city, API_KEY)
+
+    if data and forecast_df is not None:
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("Temperature", f"{data['current']['temp_c']} °C")
+            st.metric("Condition", data['current']['condition']['text'])
+        with col2:
+            st.metric("Humidity", f"{data['current']['humidity']}%")
+            st.metric("Wind Speed", f"{data['current']['wind_kph']} kph")
+
+        st.subheader("📈 Temperature Forecast")
+        st.plotly_chart(plot_temperature_chart(forecast_df), use_container_width=True)
+
+   
+
+        st.map(pd.DataFrame({
+            'lat': [data['location']['lat']],
+            'lon': [data['location']['lon']]
+        }), zoom=8)
+
     else:
-        st.session_state.weather = weather
-
-# Only render once weather is stored in state
-if "weather" in st.session_state:
-    w = st.session_state.weather
-
-    # Show current stats
-    st.subheader(f"{w['current']['city']}, {w['current']['country']} — Now: {w['current']['temp_c']}°C")
-    cols = st.columns(3)
-    cols[0].metric("Humidity", f"{w['current']['humidity']}%")
-    cols[1].metric("Wind", f"{w['current']['wind_kph']} km/h")
-    cols[2].metric("Condition", w['current']['condition'])
-
-    # Plotly chart
-    fig = plot_temperature_chart(w['forecast_df'])
-    st.plotly_chart(fig, use_container_width=True)
-
-    # Map
-    m = folium.Map(location=[w['lat'], w['lon']], zoom_start=10)
-    folium.Marker(
-        [w['lat'], w['lon']],
-        tooltip=city,
-        icon=folium.Icon(color="blue")
-    ).add_to(m)
-    st.subheader("Location Map")
-    st_folium(m, width=700, height=450)
+        st.error("❌ Could not fetch weather data. Please check the city name or API key.")
