@@ -1,5 +1,4 @@
-config.py
 __pycache__/
 *.pyc
-.streamlit
-.devcontainer
+.streamlit/secrets.toml
+.devcontainer/
