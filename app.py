@@ -1,7 +1,7 @@
 
 import streamlit as st
 import pandas as pd
-from config import API_KEY
+API_KEY = st.secrets["API_KEY"]
 from weather_fetcher import fetch_weather_data
 from visualize import plot_temperature_chart
 
