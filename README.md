@@ -9,3 +9,5 @@ TO START THIS LOCALY IN YOUR COMPUTER
 pip install -r requirements.txt
 
 streamlit run app.py
+
+new new new
