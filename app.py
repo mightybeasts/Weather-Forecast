@@ -6,12 +6,12 @@ from weather_fetcher import fetch_weather_data
 from visualize import plot_temperature_chart
 
 st.set_page_config(
-    page_title="🌤️ Weather Forecast Dashboard",
+    page_title="WeatherNow",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-st.title("🌤️ Weather Forecast Dashboard")
+st.title("WeatherNow Dashboard")
 city = st.text_input("Enter city name", "Bangalore")
 
 if city:
@@ -26,7 +26,7 @@ if city:
             st.metric("Humidity", f"{data['current']['humidity']}%")
             st.metric("Wind Speed", f"{data['current']['wind_kph']} kph")
 
-        st.subheader("📈 Temperature Forecast")
+        st.subheader("Temperature Forecast")
         st.plotly_chart(plot_temperature_chart(forecast_df), use_container_width=True)
 
    

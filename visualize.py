@@ -10,7 +10,7 @@ def plot_temperature_chart(df):
         df,
         x='time',
         y='temperature',
-        title='🌡️ Hourly Temperature Forecast',
+        title='Hourly Temperature Forecast',
         markers=True,
         labels={"temperature": "Temp (°C)", "time": "Time"},
         line_shape="spline",
