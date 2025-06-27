@@ -19,4 +19,4 @@ A simple Streamlit app that shows real-time weather data using [WeatherAPI](http
 
 # Live Website
 
-```https://weatherforecastnow.streamlit.app/```
+[weatherforecastnow](https://weatherforecastnow.streamlit.app)
